@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dummy-webapp-deployment
+  labels:
+    app: dummy-webapp
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: dummy-webapp
+  template:
+    metadata:
+      labels:
+        app: dummy-webapp
+    spec:
+      containers:
+      - name: webapp
+        image: noizysthlm/sigstore-test:signed
+        ports:
+        - containerPort: 5000
