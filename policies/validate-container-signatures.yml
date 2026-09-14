@@ -1,0 +1,37 @@
+# https://kubespec.dev/kyverno/policies.kyverno.io/v1/ImageValidatingPolicy
+# https://kyverno.io/docs/policy-types/image-validating-policy/
+
+apiVersion: policies.kyverno.io/v1
+kind: ImageValidatingPolicy
+metadata:
+  name: validate-container-signatures
+spec:
+  validationActions: [Deny]
+  failurePolicy: Fail
+  webhookConfiguration:
+    timeoutSeconds: 30  # must be between 1 and 30
+  evaluation:
+    background:
+      enabled: false
+  matchConstraints:
+    matchPolicy: 'Equivalent' # Equivalent is the Default
+    resourceRules:
+      - apiGroups: [""]
+        apiVersions: ["v1"]
+        operations: ["CREATE", "UPDATE"]
+        resources: ["pods"]
+  matchImageReferences:
+    - glob: "docker.io/noizysthlm/sigstore-test:*"  #Is this too narrow?
+  attestors:
+    - name: cosign
+      cosign:
+        keyless:
+          identities:
+            - subject: "noizy.sthlm@gmail.com"
+              issuer: "https://accounts.google.com"
+        ctlog: 
+          url: https://rekor.sigstore.dev
+  validations:
+    - expression: >-
+        images.containers.map(image, verifyImageSignatures(image, [attestors.cosign])).all(e, e > 0)
+      message: "Image signature verification failed. Ensure that the image is signed by noizy.sthlm@gmail.com and that a the signature is recorded in Rekor"
