@@ -35,7 +35,7 @@ There are currently two workflows in this repo.
 This workflow traverses through all commits that are to be mergerd by the PR and checks their signatures with `gitsign verify`. `git rev-list origin/${BASE_REF}..HEAD)` gives us a set of all commits reachable from `HEAD` but not `BASE_REF`. See [GitHub Context Reference](https://docs.github.com/en/actions/reference/workflows-and-actions/contexts#github-context) and [git-rev-list](https://git-scm.com/docs/git-rev-list)
 
 #### container-build-push-sign
-Builds, pushes, and signs the image to `ghcr.io`.
+Builds, pushes, and signs the image to `ghcr.io`. The oicd-issuer will be `https://token.actions.githubusercontent.com` and the certificate identity: `https://github.com/USERNAME/REPOSITORY_NAME/.github/workflows/WORKFLOW_NAME@refs/heads/BRANCH_NAME` as described in [OIDC Usage in Fulcio](https://docs.sigstore.dev/certificate_authority/oidc-in-fulcio/#github).
 
 
 ### main branch protection
