@@ -27,7 +27,7 @@ spec:
       cosign:
         keyless:
           identities:
-            - subject: "https://github.com/noizysthlm/sigstore-demo/.github/workflows/container-build-push-sign@refs/heads/main"
+            - subject: "https://github.com/noizysthlm/sigstore-demo/.github/workflows/docker-release.yml@refs/heads/main"
               issuer: "https://token.actions.githubusercontent.com"
         ctlog: 
           url: https://rekor.sigstore.dev
