@@ -35,7 +35,7 @@ There are currently two workflows in this repo.
 This workflow traverses through all commits that are to be mergerd by the PR and checks their signatures with `gitsign verify`. `git rev-list origin/${BASE_REF}..HEAD)` gives us a set of all commits reachable from `HEAD` but not `BASE_REF`. See [GitHub Context Reference](https://docs.github.com/en/actions/reference/workflows-and-actions/contexts#github-context) and [git-rev-list](https://git-scm.com/docs/git-rev-list)
 
 #### container-build-push-sign
-Builds and pushes the image to `docker.io`. Currently doesn't sign the image.
+Builds, pushes, and signs the image to `ghcr.io`.
 
 
 ### main branch protection

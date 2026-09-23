@@ -21,17 +21,20 @@ spec:
         operations: ["CREATE", "UPDATE"]
         resources: ["pods"]
   matchImageReferences:
-    - glob: "docker.io/noizysthlm/sigstore-test:*"  #Is this too narrow?
+    - glob: "ghcr.io/noizysthlm/sigstore-demo:*"
   attestors:
     - name: cosign
       cosign:
         keyless:
           identities:
-            - subject: "noizy.sthlm@gmail.com"
-              issuer: "https://accounts.google.com"
+            - subject: "https://github.com/noizysthlm/sigstore-demo/.github/workflows/container-build-push-sign@refs/heads/main"
+              issuer: "https://token.actions.githubusercontent.com"
         ctlog: 
           url: https://rekor.sigstore.dev
   validations:
     - expression: >-
         images.containers.map(image, verifyImageSignatures(image, [attestors.cosign])).all(e, e > 0)
-      message: "Image signature verification failed. Ensure that the image is signed by noizy.sthlm@gmail.com and that a the signature is recorded in Rekor"
+      message: |
+        Image signature verification failed.
+        Ensure that the image is signed by https://github.com/noizysthlm/sigstore-demo/.github/workflows/container-build-push-sign@refs/heads/main
+        The signature must be recorded in the public Rekor log
